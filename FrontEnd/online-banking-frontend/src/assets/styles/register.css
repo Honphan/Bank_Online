@@ -1,0 +1,104 @@
+:root{
+    --primary: #0d6efd; /* màu xanh chủ đạo (Bootstrap blue) */
+    --primary-700: #0b5ed7;
+    --white: #ffffff;
+    --muted: #6b7280;
+    --input-border: #e5e7eb;
+    --error: #ef4444;
+    --radius: 10px;
+  }
+  
+  /* container */
+  .form-container {
+    max-width: 480px;
+    margin: 24px auto;
+    padding: 20px;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.08);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  
+  /* heading */
+  .form-container h2 {
+    margin: 0 0 12px 0;
+    color: var(--primary-700);
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  /* inputs */
+  .form-input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 8px;
+    margin-bottom: 6px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: box-shadow .15s ease, border-color .15s ease;
+    background: #fff;
+  }
+  
+  .form-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(13,110,253,0.08);
+  }
+  
+  /* checkbox label */
+  .form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    color: var(--muted);
+  }
+  
+  /* primary button */
+  .btn-primary {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 14px;
+    margin-top: 12px;
+    background: linear-gradient(180deg, var(--primary), var(--primary-700));
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform .08s ease, box-shadow .12s ease;
+    box-shadow: 0 6px 14px rgba(13,110,253,0.18);
+  }
+  
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); box-shadow: 0 4px 10px rgba(13,110,253,0.14); }
+  
+  /* secondary social buttons */
+  .btn-social {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--input-border);
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  /* error text */
+  .form-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin: 4px 0 0 0;
+  }
+  
+  /* small helper text */
+  .form-help {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  
+  /* responsive */
+  @media (max-width: 520px) {
+    .form-container { margin: 12px; padding: 16px; }
+  }
+  
