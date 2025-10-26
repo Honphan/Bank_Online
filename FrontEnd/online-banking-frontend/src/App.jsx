@@ -11,6 +11,7 @@ import WithdrawPage from './components/Dashboard/QuickAction/WithdrawPage.jsx'
 import ExchangePage from './components/Dashboard/QuickAction/ExchangePage.jsx'
 import HistoryPage from './components/Dashboard/QuickAction/HistoryPage.jsx'
 import ProfilePage from './components/Dashboard/QuickAction/ProfilePage.jsx'
+import ChatWithAdmin from './components/Dashboard/QuickAction/MessageWithAdmin.jsx'
 import ProtectedRoute from './routes/ProtectedRoute.jsx'
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Route path="exchange" element={<ExchangePage />} />
           <Route path="history" element={<HistoryPage />} />
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="chat-with-admin" element={<ChatWithAdmin />} />
         </Route>
         <Route
           path="/admin/dashboard"

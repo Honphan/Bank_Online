@@ -4,7 +4,7 @@ export default function WithdrawPage() {
   return (
     <div className="card">
       <h4>Rút tiền</h4>
-      <p>Form rút tiền sẽ hiển thị ở đây.</p>
+      <p>Tính năng đang phát triển.</p>
     </div>
   );
 }

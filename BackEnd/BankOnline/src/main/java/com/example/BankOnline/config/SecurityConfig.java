@@ -70,6 +70,12 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Cấu hình authorize
                 .authorizeHttpRequests(auth -> auth
+
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/ws-native/**").permitAll()  // THÊM DÒNG NÀY
+                        .requestMatchers("/app/**").permitAll()
+                        .requestMatchers("/topic/**").permitAll()
+
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/api/user/**").hasRole("USER")

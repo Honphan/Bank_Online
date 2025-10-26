@@ -9,7 +9,8 @@ const QuickActions = () => {
       { id: 4, name: 'Rút tiền',nameValue:'withdraw', icon: '🏧', color: '#ef4444' },
       { id: 5, name: 'Chuyển đổi',nameValue:'exchange', icon: '🔄', color: '#8b5cf6' },
       { id: 6, name: 'Lịch sử',nameValue:'history', icon: '📊', color: '#06b6d4' },
-      { id: 3, name: 'Thông tin cá nhân',nameValue:'profile', icon: '👤', color: '#0ea5e9' }
+      { id: 3, name: 'Thông tin cá nhân',nameValue:'profile', icon: '👤', color: '#0ea5e9' },
+      { id: 7, name: 'Chat với Admin',nameValue:'chat-with-admin', icon: '💬', color: '#f59e0b' }
     ];
   
     return (
