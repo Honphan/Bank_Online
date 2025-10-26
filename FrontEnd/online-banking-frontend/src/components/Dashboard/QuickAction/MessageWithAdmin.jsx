@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import WebSocketNative from '../../../api/WebSocketNative';
-import './MessageWithAdmin.css'; // Import CSS for styling
-
+import '../../../assets/styles/Dashboard/MessageWithAdmin.css'; // Import CSS for styling
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
@@ -27,7 +26,6 @@ const ChatComponent = () => {
           }
         }
       );
-        console.log('Fetched message history:', response);
         const data = await response.json();
         console.log('Parsed message history:', data);
         setMessages(data);
@@ -64,9 +62,33 @@ const ChatComponent = () => {
     };
   }, []);
 
+  const formatTimestamp = (timestamp) => {
+    try {
+      const date = new Date(timestamp); // Attempt to parse the timestamp
+      if (isNaN(date.getTime())) {
+        console.error('Invalid timestamp received:', timestamp);
+        return 'Vừa xong';
+      }
+
+      const now = new Date();
+      const diff = now - date;
+
+      if (diff < 60000) return 'Vừa xong';
+      if (diff < 3600000) return `${Math.floor(diff / 60000)} phút trước`;
+      if (diff < 86400000) return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleDateString('vi-VN');
+    } catch (error) {
+      console.error('Error formatting timestamp:', error);
+      return 'Vừa xong';
+    }
+  };
+
   // Auto scroll xuống tin nhắn mới nhất
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const chatContainer = messagesEndRef.current?.parentNode;
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
   }, [messages]);
 
   const handleSendMessage = async (e) => {
@@ -80,7 +102,6 @@ const ChatComponent = () => {
         senderName: username,
         role: 'ROLE_USER',
         senderRole: 'ROLE_USER',
-        times: new Date().toLocaleTimeString(),
         timestamp: Date.now()
       };
       console.log('Sending message:', chatMessage);
@@ -90,23 +111,11 @@ const ChatComponent = () => {
         // Send the message via WebSocket
         WebSocketNative.sendMessage(chatMessage);
 
-       
         setMessageInput('');
       } catch (error) {
         console.error('Error sending message:', error);
       }
     }
-  };
-
-    const formatTimestamp = (timestamp) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diff = now - date;
-    
-    if (diff < 60000) return 'Vừa xong';
-    if (diff < 3600000) return `${Math.floor(diff / 60000)} phút trước`;
-    if (diff < 86400000) return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-    return date.toLocaleDateString('vi-VN');
   };
 
   // Màn hình chat
@@ -122,7 +131,7 @@ const ChatComponent = () => {
           </span>
         </div>
 
-        <div className="messages-container">
+        <div className="messages-container" style={{ overflowY: 'auto', maxHeight: '400px' }}>
           {messages.map((msg, index) => (
             <div
               key={index}

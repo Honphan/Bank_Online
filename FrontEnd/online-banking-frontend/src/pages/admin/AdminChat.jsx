@@ -33,8 +33,12 @@ const AdminChat = () => {
   }, [selectedUser]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    if (selectedUser) {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 0); // Ensure DOM updates before scrolling
+    }
+  }, [selectedUser, messages]);
 
   const loadConversations = async () => {
     try {
@@ -85,7 +89,7 @@ const AdminChat = () => {
           message: msg.message,
           sender: msg.senderRole === 'ROLE_ADMIN' ? msg.adminId : msg.userId,
           senderName: msg.senderRole === 'ROLE_ADMIN' ? 'Admin' : 'User',
-          time: new Date(msg.timestamp).toLocaleTimeString(),
+          timestamp: msg.timestamp,
           role: msg.senderRole
         }));
         console.log('Formatted chat history:', formattedMessages);
@@ -130,40 +134,53 @@ const AdminChat = () => {
       reconnectDelay: 5000,
       heartbeatIncoming: 10000,
       heartbeatOutgoing: 10000,
-      
+
       onConnect: () => {
         console.log('✅ Admin WebSocket Connected');
         setIsConnected(true);
-        
+
         client.subscribe(`/topic/admin/${ADMIN_ID}`, (message) => {
-          console.log('📩 : Admin nhận tin nhắn từ user: ', message.body);
+          console.log('📩 : Admin received message from user: ', message.body);
           if (message.body) {
             const chatMessage = JSON.parse(message.body);
-            
-            if (selectedUser && chatMessage.sender === selectedUser.userId) {
-              setMessages(prev => [...prev, {
-                ...chatMessage,
-                senderName: chatMessage.sender
-              }]);
-              markAsRead(chatMessage.sender);
-            } else {
-              setConversations(prev => {
-                const existing = prev.find(c => c.userId === chatMessage.sender);
-                if (existing) {
-                  return prev.map(c => 
-                    c.userId === chatMessage.sender 
-                      ? { ...c, lastMessage: chatMessage.message, timestamp: new Date(), unread: true }
-                      : c
-                  );
-                } else {
-                  return [...prev, {
+            console.log('📩 : Admin received message:', chatMessage);
+
+            setConversations((prev) => {
+              const existingConversation = prev.find(
+                (conv) => conv.userId === chatMessage.userId
+              );
+
+              console.log('Existing conversation:', existingConversation);
+
+              if (existingConversation) {
+                // Update the existing conversation to mark it as unread
+                return prev.map((conv) =>
+                  conv.userId === chatMessage.userId
+                    ? {
+                        ...conv,
+                        lastMessage: chatMessage.message,
+                        timestamp: new Date(),
+                        unread: true,
+                      }
+                    : conv
+                );
+              } else {
+                // Add a new conversation if it doesn't exist
+                return [
+                  ...prev,
+                  {
                     userId: chatMessage.sender,
                     lastMessage: chatMessage.message,
                     timestamp: new Date(),
-                    unread: true
-                  }];
-                }
-              });
+                    unread: true,
+                  },
+                ];
+              }
+            });
+
+            if (selectedUser && chatMessage.sender === selectedUser.userId) {
+              setMessages((prev) => [...prev, chatMessage]);
+              markAsRead(chatMessage.sender);
             }
           }
         });
@@ -193,13 +210,18 @@ const AdminChat = () => {
         adminId: ADMIN_ID,
         userId: selectedUser.userId,
         role: 'ROLE_ADMIN',
-        time: new Date().toLocaleTimeString()
+        timestamp: Date.now()
       };
+
+      console.log('📤 Admin gửi tin nhắn:', chatMessage);
+  
 
       stompClientRef.current.publish({
         destination: '/app/chat.admin',
         body: JSON.stringify(chatMessage)
       });
+
+      console.log('📤 Admin gửi tin nhắn:', chatMessage);
 
       setMessages(prev => [...prev, {
         ...chatMessage,
@@ -221,12 +243,23 @@ const AdminChat = () => {
     const date = new Date(timestamp);
     const now = new Date();
     const diff = now - date;
-    
+
     if (diff < 60000) return 'Vừa xong';
     if (diff < 3600000) return `${Math.floor(diff / 60000)} phút trước`;
     if (diff < 86400000) return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
     return date.toLocaleDateString('vi-VN');
   };
+
+  useEffect(() => {
+    if (selectedUser) {
+      const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      };
+
+      // Wait for messages to load before scrolling
+      setTimeout(scrollToBottom, 100);
+    }
+  }, [selectedUser, messages]);
 
   return (
     <div style={styles.container}>
@@ -290,7 +323,7 @@ const AdminChat = () => {
               </div>
             </div>
 
-            <div style={styles.messagesContainer}>
+            <div className="messages-container" style={styles.messagesContainer}>
               {isLoading ? (
                 <div style={styles.loading}>Đang tải lịch sử...</div>
               ) : messages.length === 0 ? (
@@ -303,13 +336,13 @@ const AdminChat = () => {
                     key={index}
                     style={{
                       ...styles.messageWrapper,
-                      justifyContent: msg.sender === ADMIN_ID ? 'flex-end' : 'flex-start'
+                      justifyContent: msg.role === 'ROLE_ADMIN' ? 'flex-end' : 'flex-start'
                     }}
                   >
                     <div
                       style={{
                         ...styles.message,
-                        backgroundColor: msg.sender === ADMIN_ID ? '#DCF8C6' : '#FFF',
+                        backgroundColor: msg.role === 'ROLE_ADMIN' ? '#DCF8C6' : '#FFF',
                         boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
                       }}
                     >
@@ -320,7 +353,7 @@ const AdminChat = () => {
                         {msg.message}
                       </div>
                       <div style={styles.messageTime}>
-                        {msg.time}
+                        {formatTimestamp(msg.timestamp)}
                       </div>
                     </div>
                   </div>
