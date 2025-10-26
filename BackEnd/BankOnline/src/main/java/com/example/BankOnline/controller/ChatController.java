@@ -46,7 +46,7 @@ public class ChatController {
             chatService.saveMessage(chatMessage);
 
             // Gửi realtime đến user
-            chatService.sendMessageToUser(chatMessage.getAdminId(), chatMessage);
+            chatService.sendMessageToUser(chatMessage.getUserId(), chatMessage);
 
             System.out.println("Admin message sent: " + chatMessage.getMessage());
         } catch (Exception e) {
