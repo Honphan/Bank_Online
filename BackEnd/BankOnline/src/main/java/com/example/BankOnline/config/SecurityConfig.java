@@ -23,6 +23,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -63,7 +64,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Cấu hinh cors
-        http
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // Tắt csrf protection
                 .csrf(csrf -> csrf.disable())
                 // staless session : không lưu session
@@ -108,6 +109,25 @@ public class SecurityConfig {
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Access Denied\", \"message\": \"You don't have permission to access this resource\"}");
         };
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        // Cho phép domain Vercel (cả main và preview)
+        config.setAllowedOrigins(List.of(
+                "https://bank-online-ltq9.vercel.app",
+                "https://bank-online-ltq9-git-main-hons-projects-e39dbcf1.vercel.app",
+                "https://bank-online-ltq9-pyd7x137m-hons-projects-e39dbcf1.vercel.app"
+        ));
+        config.addAllowedOriginPattern("https://*.vercel.app");
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
 }
