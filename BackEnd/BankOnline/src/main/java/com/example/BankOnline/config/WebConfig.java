@@ -1,4 +1,5 @@
-package com.example.bankonline.config;
+package com.example.BankOnline.config;
+
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,8 @@ public class WebConfig {
         // Cho phép domain Vercel (cả main và preview)
         config.setAllowedOrigins(List.of(
                 "https://bank-online-ltq9.vercel.app",
-                "https://bank-online-ltq9-git-main-hons-projects-e39dbcf1.vercel.app"
+                "https://bank-online-ltq9-git-main-hons-projects-e39dbcf1.vercel.app",
+                "bank-online-ltq9-pyd7x137m-hons-projects-e39dbcf1.vercel.app"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
