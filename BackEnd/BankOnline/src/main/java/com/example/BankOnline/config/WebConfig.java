@@ -19,7 +19,7 @@ public class WebConfig {
         config.setAllowedOrigins(List.of(
                 "https://bank-online-ltq9.vercel.app",
                 "https://bank-online-ltq9-git-main-hons-projects-e39dbcf1.vercel.app",
-                "bank-online-ltq9-pyd7x137m-hons-projects-e39dbcf1.vercel.app"
+                "https://bank-online-ltq9-pyd7x137m-hons-projects-e39dbcf1.vercel.app"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
