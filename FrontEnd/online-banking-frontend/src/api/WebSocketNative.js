@@ -11,7 +11,7 @@ class WebSocketNative {
     
     this.stompClient = new Client({
       // Không dùng SockJS, dùng WebSocket thuần
-      brokerURL: 'ws://localhost:8081/ws',
+      brokerURL: `${import.meta.env.VITE_BROKER_URL}`,
       
       debug: (str) => {
         console.log('STOMP: ' + USER_ID + ' - ' + str);
