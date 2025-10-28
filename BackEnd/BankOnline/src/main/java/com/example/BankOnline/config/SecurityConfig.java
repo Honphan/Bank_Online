@@ -63,7 +63,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Cấu hinh cors
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        http
                 // Tắt csrf protection
                 .csrf(csrf -> csrf.disable())
                 // staless session : không lưu session
@@ -110,45 +110,4 @@ public class SecurityConfig {
         };
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        // Cho phép origins
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "http://localhost:8081"
-        ));
-
-        // Cho phép methods
-        configuration.setAllowedMethods(Arrays.asList(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
-        ));
-
-        // Cho phép headers
-        configuration.setAllowedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Type",
-                "Accept",
-                "Origin",
-                "Access-Control-Allow-Headers"
-        ));
-
-        // Cho phép credentials (cookie, authorization header)
-        configuration.setAllowCredentials(true);
-
-        // Thời gian cache (milliseconds)
-        configuration.setMaxAge(3600L);
-
-        // Expose headers
-        configuration.setExposedHeaders(Arrays.asList(
-                "Authorization",
-                "Access-Control-Allow-Origin"
-        ));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 }
