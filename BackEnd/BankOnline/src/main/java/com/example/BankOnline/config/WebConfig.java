@@ -21,6 +21,7 @@ public class WebConfig {
                 "https://bank-online-ltq9-git-main-hons-projects-e39dbcf1.vercel.app",
                 "https://bank-online-ltq9-pyd7x137m-hons-projects-e39dbcf1.vercel.app"
         ));
+        config.addAllowedOriginPattern("https://*.vercel.app");
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
