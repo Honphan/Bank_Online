@@ -23,6 +23,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -112,43 +113,21 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        // Cho phép origins
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "http://localhost:8081"
+        CorsConfiguration config = new CorsConfiguration();
+        // Cho phép domain Vercel (cả main và preview)
+        config.setAllowedOrigins(List.of(
+                "https://bank-online-ltq9.vercel.app",
+                "https://bank-online-ltq9-git-main-hons-projects-e39dbcf1.vercel.app",
+                "https://bank-online-ltq9-pyd7x137m-hons-projects-e39dbcf1.vercel.app"
         ));
-
-        // Cho phép methods
-        configuration.setAllowedMethods(Arrays.asList(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
-        ));
-
-        // Cho phép headers
-        configuration.setAllowedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Type",
-                "Accept",
-                "Origin",
-                "Access-Control-Allow-Headers"
-        ));
-
-        // Cho phép credentials (cookie, authorization header)
-        configuration.setAllowCredentials(true);
-
-        // Thời gian cache (milliseconds)
-        configuration.setMaxAge(3600L);
-
-        // Expose headers
-        configuration.setExposedHeaders(Arrays.asList(
-                "Authorization",
-                "Access-Control-Allow-Origin"
-        ));
+        config.addAllowedOriginPattern("https://*.vercel.app");
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 }
