@@ -1,4 +1,3 @@
-📁 Cấu Trúc Dự Án
 online-banking/
 ├── BackEnd/
 │   └── BankOnline/
