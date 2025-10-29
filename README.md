@@ -43,3 +43,52 @@ online-banking/
         │   └── utils/          # Hàm tiện ích
         └── package.json
 ```
+## ⚙️ Cài Đặt Backend
+
+### 🧩 Clone repository
+```bash
+git clone <repository-url>
+cd BackEnd/BankOnline
+```
+
+### 🗄️ Cấu hình cơ sở dữ liệu
+File: `src/main/resources/application.properties`
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/bank_online
+spring.datasource.username=root
+spring.datasource.password=mat_khau_cua_ban
+```
+
+### 🧱 Tạo cơ sở dữ liệu
+```sql
+CREATE DATABASE bank_online;
+```
+
+### 🚀 Chạy ứng dụng
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+➡️ **Backend** sẽ chạy tại: [http://localhost:8081](http://localhost:8081)
+
+---
+
+## ⚙️ Cài Đặt Frontend
+
+### 📂 Di chuyển đến thư mục frontend
+```bash
+cd FrontEnd/online-banking-frontend
+```
+
+### 📦 Cài đặt dependencies
+```bash
+npm install
+```
+
+### 🚀 Chạy development server
+```bash
+npm run dev
+```
+
+➡️ **Frontend** sẽ chạy tại: [http://localhost:5173](http://localhost:5173)
